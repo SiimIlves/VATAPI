@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>VAT checker</title>
+</head>
+<body style="text-align: center">
+<div>
+    <h1>Vat Checker</h1>
+    <input type="text" id="input" />
+    <button id="btn">Search</button>
+</div>
+<div class="results" id="results"></div> <!--Area containing data-->
+<script>
+    const input = document.getElementById("input");
+    const btn = document.getElementById("btn");
+    const resultContainer = document.getElementById("results");
+    const getVATFromAPI = (vat) => {
+        fetch(`http://www.apilayer.net/api/validate?access_key=efec7b537640ffbcc5c6968c4c0ba322&vat_number=${vat}`) // ${vat} as in the number the user inserts
+            .then((response) => {
+                return response.json();
+            })
+            .then(({ valid, database, format_valid, query, country_code, vat_number, company_name, company_address }) => {
+                resultContainer.innerHTML = `
+                    Valid: ${valid}
+                    Database: ${database}
+                    Format Valid: ${format_valid}
+                    Query: ${query}
+                    Country: ${country_code}
+                    Vat Number: ${vat_number}
+                    Company Name: ${company_name}
+                    Company Address: ${company_address}
+                    `;
+            }); //fetches these specific data strings from aformentioned website
+    };
+    btn.addEventListener("click", (event) => {
+        getVATFromAPI(input.value); // Gives the search button a task to activate the scripts
+    });
+</script>
+</body>
+</html>
+<!--Example VAT Number GB936122928-->
